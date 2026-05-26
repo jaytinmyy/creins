@@ -1,0 +1,96 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global safety catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- REUSABLE HELPER FUNCTIONS ---
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+
+    function isValidCustomer(data) {
+      return data.keys().hasAll(['id', 'name', 'icNumber', 'phoneNumber', 'code', 'startDate', 'endDate', 'active'])
+        && data.id is string && data.id.size() <= 128
+        && data.name is string && data.name.size() <= 256
+        && data.icNumber is string && data.icNumber.size() <= 32
+        && data.phoneNumber is string && data.phoneNumber.size() <= 32
+        && data.code is string && data.code.size() <= 32
+        && data.startDate is string && data.startDate.size() == 10
+        && data.endDate is string && data.endDate.size() == 10
+        && data.active is bool
+        && (!('icImage' in data) || (data.icImage is string && data.icImage.size() <= 5000000))
+        && (!('proofImage' in data) || (data.proofImage is string && data.proofImage.size() <= 5000000));
+    }
+
+    function isValidInstallmentPlan(data) {
+      return data.keys().hasAll(['id', 'customerId', 'finalPayable', 'totalInterest', 'totalServiceFee', 'totalDiscount', 'createdAt', 'input', 'schedule'])
+        && data.id is string && data.id.size() <= 128
+        && data.customerId is string && data.customerId.size() <= 128
+        && data.finalPayable is number
+        && data.totalInterest is number
+        && data.totalServiceFee is number
+        && data.totalDiscount is number
+        && data.createdAt is string
+        && data.input is map
+        && data.schedule is list
+        && data.input.principalAmount is number
+        && data.input.months is number
+        && data.input.interestType is string
+        && data.input.interestRatePercent is number
+        && data.input.serviceFeeType is string
+        && data.input.serviceFeeValue is number
+        && data.input.discountType is string
+        && data.input.discountValue is number
+        && data.input.penaltyFeeAmount is number
+        && data.input.latePaymentFeeType is string
+        && data.input.latePaymentFeeValue is number
+        && data.input.adjustmentMode is string;
+    }
+
+    function isValidAuditLog(data) {
+      return data.keys().hasAll(['id', 'timestamp', 'userRole', 'userEmail', 'action', 'details'])
+        && data.id is string && data.id.size() <= 128
+        && data.timestamp is string && data.timestamp.size() <= 64
+        && data.userRole is string && data.userRole.size() <= 32
+        && data.userEmail is string && data.userEmail.size() <= 128
+        && data.action is string && data.action.size() <= 128
+        && data.details is string && data.details.size() <= 10000;
+    }
+
+    function isValidCompanyProfile(data) {
+      return data.keys().hasAll(['name', 'logoUrl'])
+        && data.name is string && data.name.size() <= 256
+        && data.logoUrl is string && data.logoUrl.size() <= 2048
+        && (!('phoneNumber' in data) || (data.phoneNumber is string && data.phoneNumber.size() <= 32))
+        && (!('terms' in data) || (data.terms is string && data.terms.size() <= 10000));
+    }
+
+    // --- COLLECTION RULES MATCHES ---
+    match /customers/{customerId} {
+      allow read: if true;
+      allow create, update: if isValidId(customerId) && isValidCustomer(request.resource.data);
+      allow delete: if false; // Demote or toggle active status instead of hard deletion.
+    }
+
+    match /plans/{planId} {
+      allow read: if true;
+      allow create, update: if isValidId(planId) && isValidInstallmentPlan(request.resource.data);
+      allow delete: if false;
+    }
+
+    match /logs/{logId} {
+      allow read: if true;
+      allow create: if isValidId(logId) && isValidAuditLog(request.resource.data);
+      allow update, delete: if false; // Audit logs must be immutable once written.
+    }
+
+    match /companyProfile/{doc} {
+      allow read: if true;
+      allow create, update: if isValidId(doc) && doc == 'info' && isValidCompanyProfile(request.resource.data);
+      allow delete: if false;
+    }
+  }
+}

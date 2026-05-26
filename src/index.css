@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&family=Fira+Code:wght@350;400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Quicksand", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Quicksand", "Inter", -apple-system, sans-serif;
+  --font-mono: "Fira Code", monospace;
+  
+  --color-luxury-gold: #fdf2e2; /* Creamy subtle gold light glow */
+  --color-cre-mint: #D0FAFB;    /* Creamy pastel mint blue */
+  --color-cre-pink: #FFF0F7;    /* Elegant pastel soft pink */
+  --color-cre-purple: #E1EEFF;  /* Creamy soft light lavender-blue */
+  --color-cre-cream: #FAF9F5;   /* Luxurious ivory cream background */
+}
+
+/* Base custom resets */
+body {
+  background-color: #FAF9F5 !important;
+  font-family: var(--font-sans);
+  color: #0f172a;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Core Apple-Minimal / High-end Toy Brand Button */
+.cre-button {
+  background-color: #999999 !important;
+  color: #ffffff !important;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.77rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1.5px solid #000000 !important;
+  border-radius: 14px !important;
+  box-shadow: inset 0 1.5px 3px rgba(255, 255, 255, 0.45), 0 3px 10px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cre-button:hover {
+  filter: brightness(1.05) !important;
+  transform: translateY(-1px);
+}
+
+.cre-button:active {
+  transform: scale(0.98) !important;
+}
+
+/* Glassmorphism Classes for Soft Korean-Packaging aesthetic */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(15, 23, 42, 0.085);
+  box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.05), 0 4px 12px -4px rgba(0, 0, 0, 0.02);
+}
+
+.dreamy-gradient {
+  background: linear-gradient(135deg, #FAF9F5 0%, #D0FAFB 35%, #FFF0F7 70%, #E1EEFF 100%);
+}
+
+.soft-card-shadow {
+  box-shadow: 0 12px 36px -12px rgba(0, 0, 0, 0.04), 0 4px 12px -8px rgba(0, 0, 0, 0.02);
+}
+
+.soft-button-shadow {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+/* Custom visual toy-like sparkles */
+.star-sparkle {
+  position: absolute;
+  background: radial-gradient(circle, #ffffff 10%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Animations for floating elements */
+@keyframes floatDownUp {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1.5deg); }
+}
+
+@keyframes floatCloud {
+  0% { transform: translateX(-20vw) translateY(0px) scale(0.85); }
+  50% { transform: translateX(50vw) translateY(12px) scale(1.05); }
+  100% { transform: translateX(120vw) translateY(-5px) scale(0.85); }
+}
+
+@keyframes slowRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.1; transform: scale(0.7); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes softGlowPulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.08); }
+}
+
+.animate-float-slow {
+  animation: floatDownUp 8s ease-in-out infinite;
+}
+
+.animate-float-cloud-1 {
+  animation: floatCloud 85s linear infinite;
+}
+
+.animate-float-cloud-2 {
+  animation: floatCloud 110s linear infinite;
+  animation-delay: -30s;
+}
+
+.animate-float-cloud-3 {
+  animation: floatCloud 95s linear infinite;
+  animation-delay: -10s;
+}
+
+.animate-twinkle-1 {
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+.animate-twinkle-2 {
+  animation: twinkle 6s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+.animate-twinkle-3 {
+  animation: twinkle 8s ease-in-out infinite;
+  animation-delay: 3.5s;
+}
+
+.animate-glow-pulse-slow {
+  animation: softGlowPulse 10s ease-in-out infinite;
+}
+
+.animate-rotate-glow {
+  animation: slowRotate 40s linear infinite;
+}
+
+/* Custom styling for print support A4 layout */
+@media print {
+  /* Hide standard window elements and scroll chrome */
+  body, html, #root, main {
+    background: white !important;
+    background-color: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    width: 100% !important;
+  }
+
+  .no-print, header, footer, nav, button, .no-print * {
+    display: none !important;
+  }
+
+  /* Force print paper overlay to fit perfectly flat on physical sheet margins */
+  #A4-simulated-paper, #A4-simulated-paper * {
+    visibility: visible !important;
+    display: block !important;
+  }
+
+  #A4-simulated-paper {
+    position: relative !important;
+    width: 100% !important;
+    max-width: 210mm !important;
+    padding: 10mm !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: white !important;
+  }
+}

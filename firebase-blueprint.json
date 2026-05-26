@@ -1,0 +1,79 @@
+{
+  "entities": {
+    "Customer": {
+      "title": "Customer",
+      "description": "Represents a credit leasing customer profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "icNumber": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "code": { "type": "string" },
+        "icImage": { "type": "string" },
+        "proofImage": { "type": "string" },
+        "startDate": { "type": "string" },
+        "endDate": { "type": "string" },
+        "active": { "type": "boolean" }
+      },
+      "required": ["id", "name", "icNumber", "phoneNumber", "code", "startDate", "endDate", "active"]
+    },
+    "InstallmentPlan": {
+      "title": "InstallmentPlan",
+      "description": "Represents the active financial details and monthly repayment timeline",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "customerId": { "type": "string" },
+        "finalPayable": { "type": "number" },
+        "totalInterest": { "type": "number" },
+        "totalServiceFee": { "type": "number" },
+        "totalDiscount": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "customerId", "finalPayable", "totalInterest", "totalServiceFee", "totalDiscount", "createdAt"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Administrative action trace logs",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "userRole": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "action": { "type": "string" },
+        "details": { "type": "string" }
+      },
+      "required": ["id", "timestamp", "userRole", "userEmail", "action", "details"]
+    },
+    "CompanyProfile": {
+      "title": "CompanyProfile",
+      "description": "Profile info for changing company name and logo",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "logoUrl": { "type": "string" }
+      },
+      "required": ["name"]
+    }
+  },
+  "firestore": {
+    "customers/{customerId}": {
+      "schema": "Customer",
+      "description": "Debtors information index"
+    },
+    "plans/{planId}": {
+      "schema": "InstallmentPlan",
+      "description": "Detailed repayment plans and installment structures"
+    },
+    "logs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Audit and compliance log entries"
+    },
+    "companyProfile/info": {
+      "schema": "CompanyProfile",
+      "description": "Global company metadata customization parameters"
+    }
+  }
+}

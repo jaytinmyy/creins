@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Installment Payment Management System",
+  "description": "An internal high-end Fintech Admin Dashboard for creating, calculating, managing, and tracking customer installment plans, contract printing, and audit logs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
